@@ -6,274 +6,331 @@ import java.util.Map;
 import java.util.Scanner;
 
 interface Linguagem {
-	Map<String, Integer> ambiente = new HashMap<>();
-	Scanner scanner = new Scanner(System.in);
 
-	interface Bool {
-		boolean getValor();
-	}
+    Map<String, Integer> ambiente = new HashMap<>();
+    Scanner scanner = new Scanner(System.in);
 
-	interface Comando {
-		void execute();
-	}
+    interface Bool {
 
-	interface Expressao {
-		int getValor();
-	}
+        boolean getValor();
+    }
 
-	/*
+    interface Comando {
+
+        void execute();
+    }
+
+    interface Expressao {
+
+        int getValor();
+    }
+
+    /*
 	  Comandos
-	 */
-	class Programa {
-		private final List<Comando> comandos;
-		public Programa(List<Comando> comandos) {
-			this.comandos = comandos;
-		}
-		public void execute() {
-			comandos.forEach(Comando::execute);
-		}
-	}
+     */
+    class Programa {
 
-	class Se implements Comando {
-		private final Bool condicao;
-		private final Comando entao;
-		private final Comando senao;
+        private final List<Comando> comandos;
 
-		public Se(Bool condicao, Comando entao, Comando senao) {
-			this.condicao = condicao;
-			this.entao = entao;
-			this.senao = senao;
-		}
+        public Programa(List<Comando> comandos) {
+            this.comandos = comandos;
+        }
 
-		@Override
-		public void execute() {
-			if (condicao.getValor())
-				entao.execute();
-			else
-				senao.execute();
-		}
-	}
+        public void execute() {
+            comandos.forEach(Comando::execute);
+        }
+    }
 
-	Skip skip = new Skip();
-	class Skip implements Comando {
-		@Override
-		public void execute() {}
-	}
+    class Se implements Comando {
 
-	class Escreva implements Comando {
-		private final Expressao exp;
+        private final Bool condicao;
+        private final Comando entao;
+        private final Comando senao;
 
-		public Escreva(Expressao exp) {
-			this.exp = exp;
-		}
+        public Se(Bool condicao, Comando entao, Comando senao) {
+            this.condicao = condicao;
+            this.entao = entao;
+            this.senao = senao;
+        }
 
-		@Override
-		public void execute() {
-			System.out.println(exp.getValor());
-		}
-	}
+        @Override
+        public void execute() {
+            if (condicao.getValor()) {
+                entao.execute();
+            } else {
+                senao.execute();
+            }
+        }
+    }
 
-	class Enquanto implements Comando {
-		private final Bool condicao;
-		private final Comando comando;
+    Skip skip = new Skip();
 
-		public Enquanto(Bool condicao, Comando comando) {
-			this.condicao = condicao;
-			this.comando = comando;
-		}
+    class Skip implements Comando {
 
-		@Override
-		public void execute() {
-			while (condicao.getValor()) {
-				comando.execute();
-			}
-		}
-	}
+        @Override
+        public void execute() {
+        }
+    }
 
-	class Exiba implements Comando {
-		private final String texto;
+    class Escreva implements Comando {
 
-		public Exiba(String texto) {
-			this.texto = texto;
-		}
+        private final Expressao exp;
 
-		@Override
-		public void execute() {
-			System.out.println(texto);
-		}
-	}
+        public Escreva(Expressao exp) {
+            this.exp = exp;
+        }
 
-	class Bloco implements Comando {
-		private final List<Comando> comandos;
+        @Override
+        public void execute() {
+            System.out.println(exp.getValor());
+        }
+    }
 
-		public Bloco(List<Comando> comandos) {
-			this.comandos = comandos;
-		}
+    class Enquanto implements Comando {
 
-		@Override
-		public void execute() {
-			comandos.forEach(Comando::execute);
-		}
-	}
+        private final Bool condicao;
+        private final Comando comando;
 
-	class Atribuicao implements Comando {
-		private final String id;
-		private final Expressao exp;
+        public Enquanto(Bool condicao, Comando comando) {
+            this.condicao = condicao;
+            this.comando = comando;
+        }
 
-		Atribuicao(String id, Expressao exp) {
-			this.id = id;
-			this.exp = exp;
-		}
+        @Override
+        public void execute() {
+            while (condicao.getValor()) {
+                comando.execute();
+            }
+        }
+    }
 
-		@Override
-		public void execute() {
-			ambiente.put(id, exp.getValor());
-		}
-	}
+    class Exiba implements Comando {
 
-	/*
+        private final String texto;
+
+        public Exiba(String texto) {
+            this.texto = texto;
+        }
+
+        @Override
+        public void execute() {
+            System.out.println(texto);
+        }
+    }
+
+    class Bloco implements Comando {
+
+        private final List<Comando> comandos;
+
+        public Bloco(List<Comando> comandos) {
+            this.comandos = comandos;
+        }
+
+        @Override
+        public void execute() {
+            comandos.forEach(Comando::execute);
+        }
+    }
+
+    class Atribuicao implements Comando {
+
+        private final String id;
+        private final Expressao exp;
+
+        Atribuicao(String id, Expressao exp) {
+            this.id = id;
+            this.exp = exp;
+        }
+
+        @Override
+        public void execute() {
+            ambiente.put(id, exp.getValor());
+        }
+    }
+
+    /*
 	   Expressoes
-	 */
+     */
+    abstract class OpBin<T> {
 
-	abstract class OpBin<T>  {
-		protected final T esq;
-		protected final T dir;
+        protected final T esq;
+        protected final T dir;
 
-		OpBin(T esq, T dir) {
-			this.esq = esq;
-			this.dir = dir;
-		}
-	}
+        OpBin(T esq, T dir) {
+            this.esq = esq;
+            this.dir = dir;
+        }
+    }
 
-	abstract class OpUnaria<T>  {
-		protected final T operando;
+    abstract class OpUnaria<T> {
 
-		OpUnaria(T operando) {
-			this.operando = operando;
-		}
-	}
+        protected final T operando;
 
-	class Inteiro implements Expressao {
-		private final int valor;
+        OpUnaria(T operando) {
+            this.operando = operando;
+        }
+    }
 
-		Inteiro(int valor) {
-			this.valor = valor;
-		}
+    class Inteiro implements Expressao {
 
-		@Override
-		public int getValor() {
-			return valor;
-		}
-	}
+        private final int valor;
 
-	class Id implements Expressao {
-		private final String id;
+        Inteiro(int valor) {
+            this.valor = valor;
+        }
 
-		Id(String id) {
-			this.id = id;
-		}
+        @Override
+        public int getValor() {
+            return valor;
+        }
+    }
 
-		@Override
-		public int getValor() {
-			return ambiente.getOrDefault(id, 0);
-		}
-	}
+    class Id implements Expressao {
 
-	Leia leia = new Leia();
-	class Leia implements Expressao {
-		@Override
-		public int getValor() {
-			return scanner.nextInt();
-		}
-	}
+        private final String id;
 
-	class ExpSoma extends OpBin<Expressao> implements Expressao {
-		ExpSoma(Expressao esq, Expressao dir) {
-			super(esq, dir);
-		}
+        Id(String id) {
+            this.id = id;
+        }
 
-		@Override
-		public int getValor() {
-			return esq.getValor() + dir.getValor();
-		}
-	}
+        @Override
+        public int getValor() {
+            return ambiente.getOrDefault(id, 0);
+        }
+    }
 
-	class ExpSub extends OpBin<Expressao> implements Expressao {
-		ExpSub(Expressao esq, Expressao dir) {
-			super(esq, dir);
-		}
+    Leia leia = new Leia();
 
-		@Override
-		public int getValor() {
-			return esq.getValor() - dir.getValor();
-		}
-	}
+    class Leia implements Expressao {
 
-	class ExpMult extends OpBin<Expressao> implements Expressao{
-		ExpMult(Expressao esq, Expressao dir) {
-			super(esq, dir);
-		}
+        @Override
+        public int getValor() {
+            return scanner.nextInt();
+        }
+    }
 
-		@Override
-		public int getValor() {
-			return esq.getValor() * dir.getValor();
-		}
-	}
+    class ExpSoma extends OpBin<Expressao> implements Expressao {
 
-	class Booleano implements Bool {
-		private final boolean valor;
+        ExpSoma(Expressao esq, Expressao dir) {
+            super(esq, dir);
+        }
 
-		Booleano(boolean valor) {
-			this.valor = valor;
-		}
+        @Override
+        public int getValor() {
+            return esq.getValor() + dir.getValor();
+        }
+    }
 
-		@Override
-		public boolean getValor() {
-			return valor;
-		}
-	}
+    class ExpSub extends OpBin<Expressao> implements Expressao {
 
-	class ExpIgual extends OpBin<Expressao> implements Bool {
-		ExpIgual(Expressao esq, Expressao dir) {
-			super(esq, dir);
-		}
+        ExpSub(Expressao esq, Expressao dir) {
+            super(esq, dir);
+        }
 
-		@Override
-		public boolean getValor() {
-			return esq.getValor() == dir.getValor();
-		}
-	}
+        @Override
+        public int getValor() {
+            return esq.getValor() - dir.getValor();
+        }
+    }
 
-	class ExpMenorIgual extends OpBin<Expressao> implements Bool{
-		ExpMenorIgual(Expressao esq, Expressao dir) {
-			super(esq, dir);
-		}
+    class ExpMult extends OpBin<Expressao> implements Expressao {
 
-		@Override
-		public boolean getValor() {
-			return esq.getValor() <= dir.getValor();
-		}
-	}
+        ExpMult(Expressao esq, Expressao dir) {
+            super(esq, dir);
+        }
 
-	class NaoLogico extends OpUnaria<Bool> implements Bool{
-		NaoLogico(Bool operando) {
-			super(operando);
-		}
+        @Override
+        public int getValor() {
+            return esq.getValor() * dir.getValor();
+        }
+    }
 
-		@Override
-		public boolean getValor() {
-			return !operando.getValor();
-		}
-	}
+    class ExpDiv extends OpBin<Expressao> implements Expressao {
 
-	class ELogico extends OpBin<Bool> implements Bool{
-		ELogico(Bool esq, Bool dir) {
-			super(esq, dir);
-		}
+        ExpDiv(Expressao esq, Expressao dir) {
+            super(esq, dir);
+        }
 
-		@Override
-		public boolean getValor() {
-			return esq.getValor() && dir.getValor();
-		}
-	}
+        @Override
+        public int getValor() {
+            if (dir.getValor() == 0) {
+                throw new ArithmeticException("Divisor não pode ser zero");
+            }
+            return (int) (esq.getValor() / dir.getValor());
+        }
+    }
+
+    class ExpPow extends OpBin<Expressao> implements Expressao {
+
+        ExpPow(Expressao esq, Expressao dir) {
+            super(esq, dir);
+        }
+
+        @Override
+        public int getValor() {
+            return (int) Math.pow(esq.getValor(), dir.getValor());
+        }
+    }
+
+    class Booleano implements Bool {
+
+        private final boolean valor;
+
+        Booleano(boolean valor) {
+            this.valor = valor;
+        }
+
+        @Override
+        public boolean getValor() {
+            return valor;
+        }
+    }
+
+    class ExpIgual extends OpBin<Expressao> implements Bool {
+
+        ExpIgual(Expressao esq, Expressao dir) {
+            super(esq, dir);
+        }
+
+        @Override
+        public boolean getValor() {
+            return esq.getValor() == dir.getValor();
+        }
+    }
+
+    class ExpMenorIgual extends OpBin<Expressao> implements Bool {
+
+        ExpMenorIgual(Expressao esq, Expressao dir) {
+            super(esq, dir);
+        }
+
+        @Override
+        public boolean getValor() {
+            return esq.getValor() <= dir.getValor();
+        }
+    }
+
+    class NaoLogico extends OpUnaria<Bool> implements Bool {
+
+        NaoLogico(Bool operando) {
+            super(operando);
+        }
+
+        @Override
+        public boolean getValor() {
+            return !operando.getValor();
+        }
+    }
+
+    class ELogico extends OpBin<Bool> implements Bool {
+
+        ELogico(Bool esq, Bool dir) {
+            super(esq, dir);
+        }
+
+        @Override
+        public boolean getValor() {
+            return esq.getValor() && dir.getValor();
+        }
+    }
 }

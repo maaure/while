@@ -1,3 +1,4 @@
 a := 10;
 escreva a;
-exiba "as"
+exiba "as";
+escreva 2 ^ 5
