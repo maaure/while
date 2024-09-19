@@ -16,4 +16,12 @@ exiba "tabela verdade xou:";
 se verdadeiro xou verdadeiro entao exiba "verdadeiro" senao exiba "falso";
 se verdadeiro xou falso entao exiba "verdadeiro" senao exiba "falso";
 se falso xou verdadeiro entao exiba "verdadeiro" senao exiba "falso";
-se falso xou falso entao exiba "verdadeiro" senao exiba "falso"
+se falso xou falso entao exiba "verdadeiro" senao exiba "falso";
+
+exiba "comparacoes:";
+
+se 1 > 1 entao exiba "verdadeiro" senao exiba "falso";
+se 1 >= 1 entao exiba "verdadeiro" senao exiba "falso";
+se 1 < 1  entao exiba "verdadeiro" senao exiba "falso";
+se 1 <= 1  entao exiba "verdadeiro" senao exiba "falso";
+se 1 <> 1  entao exiba "verdadeiro" senao exiba "falso"

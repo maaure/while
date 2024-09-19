@@ -136,6 +136,7 @@ public class Regras extends EnquantoBaseListener {
 		final Bool dir = valores.pegue(ctx.booleano(1));
 		valores.insira(ctx, new OuLogico(esq, dir));
 	}
+
 	@Override
 	public void exitXouLogico(XouLogicoContext ctx) {
 		final Bool esq = valores.pegue(ctx.booleano(0));
@@ -178,6 +179,14 @@ public class Regras extends EnquantoBaseListener {
                 new ExpIgual(esq, dir);
             case "<=" ->
                 new ExpMenorIgual(esq, dir);
+            case ">=" ->
+                new ExpMaiorIgual(esq, dir);
+            case ">" ->
+                new ExpMaiorQue(esq, dir);
+            case "<" ->
+                new ExpMenorQue(esq, dir);
+            case "<>" ->
+                new ExpDiferente(esq, dir);
             default ->
                 new ExpIgual(esq, esq);
         };
