@@ -2,7 +2,7 @@ grammar Enquanto;
 
 programa : seqComando;     // sequência de comandos
 
-seqComando: comando (';' comando)* ;
+seqComando: (comando ';')* ;
 
 comando: ID ':=' expressao                               # atribuicao
        | 'skip'                                          # skip
@@ -36,7 +36,6 @@ booleano: BOOLEANO                                       # bool
         | booleano 'e' booleano                          # eLogico
         | '(' booleano ')'                               # boolPar
         ;
-
 
 BOOLEANO: 'verdadeiro' | 'falso';
 INT: ('0'..'9')+ ;
