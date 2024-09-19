@@ -103,6 +103,29 @@ interface Linguagem {
             }
         }
     }
+    class Para implements Comando {
+
+        private final Id id;
+        private final Expressao inicio;
+        private final Expressao fim;
+        private final Comando comando;
+
+
+        public Para(Id id, Expressao inicio, Expressao fim, Comando comando) {
+            this.id = id;
+            this.inicio = inicio;
+            this.fim = fim;
+            this.comando = comando;
+        }
+
+        @Override
+        public void execute() {
+           for (int i = inicio.getValor(); i <= fim.getValor(); i++) {
+				ambiente.put(id.id, i);
+				comando.execute();
+			}
+        }
+    }
 
     class Exiba implements Comando {
 

@@ -46,6 +46,15 @@ public class Regras extends EnquantoBaseListener {
     }
 
     @Override
+	public void exitPara(ParaContext ctx) {
+		final Id id = new Id(ctx.ID().getText());
+		final Expressao inicio = valores.pegue(ctx.expressao(0));
+		final Expressao fim = valores.pegue(ctx.expressao(1));
+		final Comando comando = valores.pegue(ctx.comando());		
+		valores.insira(ctx, new Para(id, inicio, fim, comando));
+	}
+
+    @Override
     public void exitInteiro(InteiroContext ctx) {
         valores.insira(ctx, new Inteiro(parseInt(ctx.getText())));
     }
