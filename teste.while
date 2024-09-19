@@ -27,3 +27,5 @@ se 1 <= 1  entao exiba "verdadeiro" senao exiba "falso";
 se 1 <> 1  entao exiba "verdadeiro" senao exiba "falso";
 
 para i de 1 ate 5 faca escreva i;
+
+repita 10 vezes exiba "Funciona";

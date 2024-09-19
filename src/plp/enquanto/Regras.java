@@ -55,6 +55,15 @@ public class Regras extends EnquantoBaseListener {
 	}
 
     @Override
+    public void exitRepita(RepitaContext ctx) {
+        final Expressao vezes = valores.pegue(ctx.expressao());
+        
+        final Comando comando = valores.pegue(ctx.comando());
+
+        valores.insira(ctx, new Repita(vezes, comando));
+    }
+
+    @Override
     public void exitInteiro(InteiroContext ctx) {
         valores.insira(ctx, new Inteiro(parseInt(ctx.getText())));
     }

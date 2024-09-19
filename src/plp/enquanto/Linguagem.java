@@ -127,6 +127,25 @@ interface Linguagem {
         }
     }
 
+    class Repita implements Comando {
+
+    private final Expressao vezes;
+    private final Comando comando;
+
+    public Repita(Expressao vezes, Comando comando) {
+        this.vezes = vezes;
+        this.comando = comando;
+    }
+
+    @Override
+    public void execute() {
+        int repeticoes = vezes.getValor();
+        for (int i = 0; i < repeticoes; i++) {
+            comando.execute();
+        }
+    }
+}
+
     class Exiba implements Comando {
 
         private final String texto;
