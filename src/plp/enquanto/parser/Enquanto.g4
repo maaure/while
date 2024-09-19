@@ -26,6 +26,8 @@ expressao: INT                                           # inteiro
 booleano: BOOLEANO                                       # bool
         | expressao '=' expressao                        # opRel
         | expressao '<=' expressao                       # opRel
+        | booleano 'ou' booleano                         # ouLogico
+        | booleano 'xou' booleano                        # xouLogico
         | 'nao' booleano                                 # naoLogico
         | booleano 'e' booleano                          # eLogico
         | '(' booleano ')'                               # boolPar

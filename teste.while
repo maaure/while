@@ -1,4 +1,19 @@
 a := 10;
 escreva a;
 exiba "as";
-escreva 2 ^ 5
+a := 1;
+b := 1;
+
+exiba "tabela verdade ou:";
+
+se verdadeiro ou verdadeiro entao exiba "verdadeiro" senao exiba "falso";
+se verdadeiro ou falso entao exiba "verdadeiro" senao exiba "falso";
+se falso ou verdadeiro entao exiba "verdadeiro" senao exiba "falso";
+se falso ou falso entao exiba "verdadeiro" senao exiba "falso";
+
+exiba "tabela verdade xou:";
+
+se verdadeiro xou verdadeiro entao exiba "verdadeiro" senao exiba "falso";
+se verdadeiro xou falso entao exiba "verdadeiro" senao exiba "falso";
+se falso xou verdadeiro entao exiba "verdadeiro" senao exiba "falso";
+se falso xou falso entao exiba "verdadeiro" senao exiba "falso"
